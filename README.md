@@ -12,15 +12,15 @@ The analysis focuses on diagnosing margin erosion, identifying logistics bottlen
 - Power BI, DAX & Power Query
 
 ## Data Preparation & Feature Engineering. 
--Identified and resolved impossible chronological order sequences where carrier dispatch or customer delivery preceded purchase timestamps. 
+- Identified and resolved impossible chronological order sequences where carrier dispatch or customer delivery preceded purchase timestamps. 
 
--Handled missing physical product metrics using data-driven median imputation 
+- Handled missing physical product metrics using data-driven median imputation 
 
--Engineered `delivery_days` Delivery Date - Purchase Date and created a conditional 'delay_category' attribute to index fulfillment speeds(Fast, Medium, Slow, Very Slow, Extreme Delay).
+- Engineered `delivery_days` Delivery Date - Purchase Date and created a conditional 'delay_category' attribute to index fulfillment speeds(Fast, Medium, Slow, Very Slow, Extreme Delay).
 
-- Developed a `macro_product_category_name` field, rolling up over 70 granular English categories into 7 strategic business sectors 
+- Developed a `macro_product_category_name` field, rolling up over 70 granular English categories into 7 strategic business sectors
 
--Deployed a window function ranking engine to segment unique consumers by Average Order Value (AOV) 
+- Deployed a window function ranking engine to segment unique consumers by Average Order Value (AOV) 
 
 ## Key Insights
 - Home & Living and Health & Beauty were the primary profit-driving categories.
@@ -31,9 +31,9 @@ The analysis focuses on diagnosing margin erosion, identifying logistics bottlen
 - High-value customers generated the highest revenue and profit despite representing a smaller customer segment.
 
 ## Advanced Statistical Analysis
--Freight cost % was the strongest driver of margin erosion (R² = 86.6%). A 1% increase in freight cost reduced profit margin by approximately 1.02 percentage points.
--Delivery delays and higher COGS were also statistically associated with lower profit margins.
--Order-level cohort analysis showed freight costs consumed 45.1% of low-value order revenue versus 12% for high-value orders, highlighting the importance of increasing basket size.
+- Freight cost % was the strongest driver of margin erosion (R² = 86.6%). A 1% increase in freight cost reduced profit margin by approximately 1.02 percentage points.
+- Delivery delays and higher COGS were also statistically associated with lower profit margins.
+- Order-level cohort analysis showed freight costs consumed 45.1% of low-value order revenue versus 12% for high-value orders, highlighting the importance of increasing basket size.
 
 ## Dashboard Preview
 

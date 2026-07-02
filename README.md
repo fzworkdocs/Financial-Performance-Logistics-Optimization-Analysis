@@ -1,5 +1,5 @@
 # Financial-Performance-And-Logistics-Optimization-Analysis
-### PostgreSQL + Power BI Project
+### PostgreSQL + Python + Power BI Project 
 
 ## Project Overview
 This project provides an end-to-end data analysis of the Brazilian e-commerce market. While the business has experienced a significant surge in order volume and revenue growth, this expansion has not translated equally into profitability across all product categories. 

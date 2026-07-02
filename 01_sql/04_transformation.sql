@@ -107,12 +107,14 @@ UPDATE products_dim
 SET product_category_name='fashion_female_clothing'
 WHERE product_category_name='fashio_female_clothing'
 
+--RENAME TABLES
 ALTER TABLE  order_payments_dim
 RENAME TO order_payments_fact
 
 ALTER TABLE order_reviews_dim
 RENAME TO order_reviews_fact
 
+--ADD CUSTOMER REGION COLUMN IN CUSTOMER DIM TABLE
 ALTER TABLE customers_dim
 ADD COLUMN customer_region VARCHAR(50)
 
@@ -137,6 +139,7 @@ CASE
     ELSE 'Unknown'
 END;
 
+--ADD SELLER REGION COLUMN IN SELLER DIM TABLE
 ALTER TABLE sellers_dim
 ADD COLUMN seller_region VARCHAR(20);
 
@@ -161,6 +164,7 @@ CASE
     ELSE 'Unknown'
 END;
 
+--VIEW FOR CUSTOMER SEGMENTATION BY VALUE 
 CREATE VIEW customer2_value_segments AS
 WITH aov AS (
     SELECT 
@@ -217,6 +221,7 @@ SELECT
 FROM value_segments
 GROUP BY customer_value;
 
+--VIEW FOR CUSTOMER SEGMENTATION BY PURCHASE FREGUENCY
 CREATE VIEW customer_purchasefreq_segments AS
 WITH customer_orders AS (
     SELECT 
@@ -248,3 +253,47 @@ segments AS (
 
 SELECT *
 FROM segments;
+
+--ADD CUSTOMER SEGMENT BY VALUE COLUMN IN CUSTOMER DIMS TABLE
+ALTER TABLE customers_dim
+ADD COLUMN customer_value_segment VARCHAR(20);
+
+WITH aov AS (
+    SELECT
+        c.customer_unique_id,
+        ROUND(AVG(t.total_sales),0) AS avg_order_value
+    FROM(
+        SELECT o.order_id,
+            o.customer_id,
+            SUM(ot.gross_sales) AS total_sales
+        FROM orders_fact o
+        INNER JOIN order_items_fact ot ON ot.order_id = o.order_id
+        GROUP BY o.order_id,o.customer_id
+        ) AS t
+    INNER JOIN customers_dim c ON c.customer_id=t.customer_id
+    GROUP BY c.customer_unique_id
+),
+
+ranks AS(
+    SELECT 
+        customer_unique_id,
+        NTILE(100) OVER(ORDER BY avg_order_value) AS percentile_rank
+    FROM aov
+),
+
+segment AS (
+    SELECT
+        customer_unique_id,
+        CASE
+            WHEN percentile_rank <=50 THEN 'Low Value'
+            WHEN percentile_rank <=80 THEN 'Medium Value'
+            ELSE 'High Value'
+        END AS customer_value_segment
+    FROM ranks
+)
+
+UPDATE customers_dim c
+SET customer_value_segment=s.customer_value_segment
+FROM segment s
+WHERE c.customer_unique_id=s.customer_unique_id
+
